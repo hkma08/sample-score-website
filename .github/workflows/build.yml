@@ -31,12 +31,8 @@ jobs:
           echo --- Completed test cases ---
       - name: Send slack notification
         if: always()
-        uses: rtCamp/action-slack-notify@v2
+        uses: Ilshidur/action-slack@2.0.2
         env:
-          SLACK_CHANNEL: 'Slackbot'
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: 'Post Content :rocket:'
-          SLACK_TITLE: Post Title
-          SLACK_USERNAME: rtCamp
           SLACK_WEBHOOK: https://hooks.slack.com/services/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
+        with:
+          args: 'A new commit has been pushed.' # Optional
