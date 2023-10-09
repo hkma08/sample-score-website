@@ -31,18 +31,23 @@ jobs:
           echo --- Completed test cases ---
       - name: Send slack notification
         if: always()
-        # uses: hkma08/sample-score-website@develop    
-        uses: edge/simple-slack-notify@master
+        uses: rtCamp/action-slack-notify@v2
         env:
           #SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
         with:
-          channel: 'Slackbot'
-          status: ${{ job.status }}
-          success_text: Build completed successfully
-          failure_text: 'Build failed'
-          cancelled_text: 'Build was cancelled'
-          fields: |
-            [{ "title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
-            { "title": "Branch", "value": "${env.BRANCH}", "short": true },
-            { "title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]
+          SLACK_CHANNEL: 'Slackbot'
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Post Content :rocket:'
+          SLACK_TITLE: Post Title
+          SLACK_USERNAME: rtCamp
+          SLACK_WEBHOOK: https://hooks.slack.com/services/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
+          #status: ${{ job.status }}
+          #success_text: Build completed successfully
+          #failure_text: 'Build failed'
+          #cancelled_text: 'Build was cancelled'
+          #fields: |
+          #  [{ "title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
+          #  { "title": "Branch", "value": "${env.BRANCH}", "short": true },
+          #  { "title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]
