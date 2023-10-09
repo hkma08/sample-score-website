@@ -31,11 +31,12 @@ jobs:
           echo --- Completed test cases ---
       - name: Send slack notification
         if: always()
-        uses: hkma08/sample-score-website@develop    
+        # uses: hkma08/sample-score-website@develop    
+        uses: actions/checkout@v3
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
-          channel: '#deployment'
+          channel: 'Slackbot'
           status: ${{ job.status }}
           success_text: Build completed successfully
           failure_text: 'Build failed'
