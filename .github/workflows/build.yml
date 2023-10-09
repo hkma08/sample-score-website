@@ -18,4 +18,29 @@ jobs:
           path: "sample-score-website"
       - name: RunOne
         run: |
-	  echo Hello, world!
+          echo Hello, world!
+      - name: Build docker
+        run: | 
+          echo ---Building and starting up docker---
+          docker-compose -f ./sample-score-website/docker-compose.test.yml -p testing up -d
+          echo ---Containers up---s
+      - name: Run test
+        run: |
+          echo --- Running test cases ---
+          docker-compose -f ./sample-score-website/docker-compose.test-github.yml -p testing up --build --exit-code-from api-test
+          echo --- Completed test cases ---
+      - name: Send slack notification
+        if: always()
+        uses: hkma08/sample-score-website@develop    
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          channel: '#deployment'
+          status: ${{ job.status }}
+          success_text: Build completed successfully
+          failure_text: 'Build failed'
+          cancelled_text: 'Build was cancelled'
+          fields: |
+            [{ "title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
+            { "title": "Branch", "value": "${env.BRANCH}", "short": true },
+            { "title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]

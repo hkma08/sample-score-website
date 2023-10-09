@@ -1,0 +1,7 @@
+version: '3'
+services:
+  webapp-test-1:
+    container_name: webapp-test-1
+    build:
+      dockerfile: Dockerfile-webapp
+      context: ./testing
